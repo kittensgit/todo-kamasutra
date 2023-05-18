@@ -23,11 +23,18 @@ function App() {
   }
 
   const addTask = (title: string) => {
-    let newTask = {id: v1(), title: title, isDone: false}
+    let newTask = { id: v1(), title: title, isDone: false }
     let newTasks = [newTask, ...tasks]
     setTasks(newTasks)
   }
 
+  const changeStatus = (taskId: string, isDone: boolean) => {
+    let task = tasks.find(t => t.id === taskId);
+    if (task) {
+      task.isDone = isDone
+    }
+    setTasks([...tasks])
+  }
 
   const changeFilter = (value: FilterValuesType) => {
     setFilter(value)
@@ -49,6 +56,8 @@ function App() {
         removeTask={removeTask}
         changeFilter={changeFilter}
         addTask={addTask}
+        changeStatus={changeStatus}
+        filter={filter}
       />
     </div>
   );

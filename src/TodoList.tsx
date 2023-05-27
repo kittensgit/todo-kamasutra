@@ -1,5 +1,6 @@
-import React, { KeyboardEvent, ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { FilterValuesType } from "./App";
+import { AddItemForm } from "./AddItemForm";
 
 export type TasksType = {
     id: string
@@ -21,26 +22,6 @@ type PropsType = {
 
 export function TodoList(props: PropsType) {
 
-    const [title, setTitle] = useState('')
-    const [error, setError] = useState<string | null>(null)
-
-    const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        if (e.key === 'Enter') {
-            addNewTask()
-        }
-    }
-
-    const addNewTask = () => {
-        if (title.trim() !== '') {
-            props.addTask(title.trim(), props.id)
-            setTitle('')
-        } else {
-            setError('title is required')
-        }
-    }
 
     const onAllClickHandler = () => props.changeFilter('all', props.id)
     const onActiveClickHandler = () => props.changeFilter('active', props.id)
@@ -49,22 +30,17 @@ export function TodoList(props: PropsType) {
         props.removeTodolist(props.id)
     }
 
+    const addTask = (title: string) => {
+        props.addTask(title, props.id)
+    }
+
     return (
         <div>
             <h3>{props.title} <button onClick={removeTodolist}>x</button></h3>
-            <div>
-                <input value={title}
-                    onChange={onNewTitleChangeHandler}
-                    onKeyPress={onKeyPressHandler}
-                    className={error ? 'error' : ''}
-                />
-                <button onClick={addNewTask}>+</button>
-                {error && <div className="error-message"> {error}</div>}
-            </div>
             <ul>
+                <AddItemForm addItem={addTask} />
                 {
                     props.tasks.map(t => {
-
                         const onRemoveHandler = () => props.removeTask(t.id, props.id)
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             props.changeStatus(t.id, e.currentTarget.checked, props.id)
@@ -87,3 +63,4 @@ export function TodoList(props: PropsType) {
         </div>
     )
 }
+

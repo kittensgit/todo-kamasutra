@@ -41,6 +41,15 @@ function App() {
     }
   }
 
+  function changeTaskTitle(taskId: string, newTitle: string, todolistId: string) {
+    let tasks = tasksObj[todolistId];
+    let task = tasks.find(t => t.id === taskId);
+    if (task) {
+      task.title = newTitle;
+      setTasks({ ...tasksObj })
+    } 
+  }
+
   const changeFilter = (value: FilterValuesType, todolistId: string) => {
     let todolist = todolists.find(tl => tl.id === todolistId)
     if (todolist) {
@@ -53,8 +62,8 @@ function App() {
   let todolistId2 = v1();
 
   let [todolists, setTodolists] = useState<Array<TodolistType>>([
-    { id: todolistId1, title: 'wha to learn', filter: 'all' },
-    { id: todolistId2, title: 'wha to buy', filter: 'all' },
+    { id: todolistId1, title: 'what to learn', filter: 'all' },
+    { id: todolistId2, title: 'what to buy', filter: 'all' },
   ])
 
   const removeTodolist = (todolistId: string) => {
@@ -113,6 +122,7 @@ function App() {
             changeFilter={changeFilter}
             addTask={addTask}
             changeStatus={changeStatus}
+            changeTaskTitle={changeTaskTitle}
             removeTodolist={removeTodolist}
             filter={tl.filter}
           />
